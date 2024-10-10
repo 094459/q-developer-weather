@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather for {{ location.name }}</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <style>
+        #map { height: 400px; }
+    </style>
+</head>
+<body>
+    <h1>Weather for {{ location.name }}, {{ location.country }}</h1>
+    <p>Temperature: {{ weather.temp_c }}°C / {{ weather.temp_f }}°F</p>
+    <p>Condition: {{ weather.condition_text }}</p>
+    <img src="{{ weather.condition_icon }}" alt="{{ weather.condition_text }}">
+    <p>Wind: {{ weather.wind_kph }} km/h, {{ weather.wind_dir }}</p>
+    <p>Humidity: {{ weather.humidity }}%</p>
+    <p>Last updated: {{ weather.last_updated }}</p>
+    <div id="map"></div>
+    <script>
+        var map = L.map('map').setView([{{ location.lat }}, {{ location.lon }}], 5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        L.marker([{{ location.lat }}, {{ location.lon }}]).addTo(map)
+            .bindPopup('{{ location.name }}, {{ location.country }}')
+            .openPopup();
+    </script>
+    <a href="/">Search for another city</a>
+</body>
+</html>
